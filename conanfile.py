@@ -18,13 +18,13 @@ class OpensslConan(ConanFile):
         self.run("git -c advice.detachedHead=false clone --depth=1 -b OpenSSL_1_0_2a git://git.openssl.org/openssl.git")
 
     def build(self):
-        self.run(r'perl Configure VC-WIN32 no-asm --prefix=c:/some/openssl/dir', cwd='openssl')
+        self.run(r'perl Configure VC-WIN32 no-asm --prefix=binaries', cwd='openssl')
         self.run(r'ms\do_ms', cwd='openssl')
         # Note that for VS 2017 you need to set something like:
         #   set VS150COMNTOOLS=D:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\
         # manually before running this.
         vcvars = tools.vcvars_command(self.settings)
-        self.run(r'{} && nmake -f ms\ntdll.mak test'.format(vcvars), cwd='openssl')
+        self.run(r'{} && nmake -f ms\ntdll.mak'.format(vcvars), cwd='openssl')
         raise Exception("Not implemented")
 
     def package(self):
